@@ -1,0 +1,109 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="myMpxjLib" #>
+<#@ output extension=".cs" #> 
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Project List</title>
+<link rel="stylesheet" type="text/css" href="../Styles/mySite.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script type="text/javascript" src="../scripts/ejs2.min.js"></script>
+<script type="text/javascript" src="../tmpscript/myprojdata.js"></script>
+<script type="text/javascript" src="../Scripts/jquery.myUtilPlugin.js"></script>
+</head>
+<body>
+<div style="margin-left:10px;margin-top:10px;border-left:10px solid #555;">
+	<table id="tblLu" class="lu" style="border-top:0 !important;border-left:0 !important;border-right:0 !important;border-bottom:solid 10px #555 !important;">	
+		<tr>
+			<th style="display:table-cell;text-align:left;border-bottom:none;text-align:center;"><input id="inpProjNumberSearch" type="text" value="" style="color:black;width:125px;"/></th>
+			<th style="display:table-cell;text-align:left;border-bottom:none;text-align:center;border-left:1px solid #fff;"><input id="inpProjNameSearch" type="text" value="" style="color:black;width:125px;"/></th>
+			<th style="display:table-cell;text-align:left;border-bottom:none;text-align:center;border-left:1px solid #fff;"><input id="inpProjCreatedOnSearch" type="text" value="" style="color:black;width:125px;"/></th>
+			<th style="display:table-cell;text-align:left;border-bottom:none;text-align:center;border-left:1px solid #fff;"><input id="inpProjCreatedBySearch" type="text" value="" style="color:black;width:125px;"/></th>
+			<th style="display:table-cell;text-align:left;border-bottom:none;text-align:center;border-left:1px solid #fff;"><input id="inpProjUpdatedOnSearch" type="text" value="" style="color:black;width:125px;"/></th>
+			<th style="display:table-cell;text-align:left;border-bottom:none;text-align:center;border-left:1px solid #fff;"><input id="inpProjUpdatedBySearch" type="text" value="" style="color:black;width:125px;"/></th>
+		    <th style="display:table-cell;text-align:left;border-bottom:none;text-align:center;">
+				<div class="btn3luGlyph" style="font-size:12px;width=100%;text-align:center;"><span class="glyphicon glyphicon-search" style="padding-left:5px;padding-right:5px;padding-bottom:2px;"></span></div>
+			</th>
+		    <th style="display:table-cell;text-align:left;border-bottom:none;text-align:center;">
+				<div class="btn3luGlyph" style="font-size:12px;width=100%;text-align:center;"><span class="glyphicon glyphicon-remove" style="padding-left:5px;padding-right:5px;padding-top:4px;"></span></div>
+			</th>
+		</tr>
+		<tr>
+			<th class="leftBbn">
+				<div class="divProjNumber">
+					<div style="display:inline-block;padding-top:10px;padding-left:10px;">Number</div>
+					<div class="divProjSort">
+						<div class="divProjSortGlyphL btn3SortGlyphLarge" style=""><span class="glyphicon glyphicon-sort-by-alphabet"></span></div>
+						<div class="divProjSortGlyphR"><span class="glyphicon glyphicon-sort-by-alphabet-alt"></span></div>
+					</div>
+				</div>
+			</th>
+			<th class="leftBbn" style="border-left:1px solid #fff;">
+				<div class="divProjName">
+					<div style="display:inline-block;padding-top:10px;padding-left:20px;">Name</div>
+					<div class="divProjSort">
+						<div class="divProjSortGlyphL"><span class="glyphicon glyphicon-sort-by-alphabet" style="vertical-align:bottom;"></span></div>
+						<div class="divProjSortGlyphR"><span class="glyphicon glyphicon-sort-by-alphabet-alt" style="vertical-align:bottom;"></span></div>
+					</div>
+				</div>
+			</th>
+			<th class="leftBbn" style="border-left:1px solid #fff;">
+				<div class="divProjCreatedOn">
+					<div style="display:inline-block;padding-top:10px;padding-left:10px;">Created On</div>
+					<div class="divProjSort">
+						<div class="divProjSortGlyphL"><span class="glyphicon glyphicon-sort-by-alphabet" style="vertical-align:bottom;"></span></div>
+						<div class="divProjSortGlyphR"><span class="glyphicon glyphicon-sort-by-alphabet-alt" style="vertical-align:bottom;"></span></div>
+					</div>
+				</div>
+			</th>
+			<th class="leftBbn" style="border-left:1px solid #fff;">
+				<div class="divProjCreatedBy">
+					<div style="display:inline-block;padding-top:10px;padding-left:20px;">Created By</div>
+					<div class="divProjSort">
+						<div class="divProjSortGlyphL"><span class="glyphicon glyphicon-sort-by-alphabet" style="vertical-align:bottom;"></span></div>
+						<div class="divProjSortGlyphR"><span class="glyphicon glyphicon-sort-by-alphabet-alt" style="vertical-align:bottom;"></span></div>
+					</div>
+				</div>
+			</th>
+			<th class="leftBbn" style="border-left:1px solid #fff;">
+				<div class="divProjUpdatedOn">
+					<div style="display:inline-block;padding-top:10px;padding-left:10px;">Updated On</div>
+					<div class="divProjSort">
+						<div class="divProjSortGlyphL"><span class="glyphicon glyphicon-sort-by-alphabet" style="vertical-align:bottom;"></span></div>
+						<div class="divProjSortGlyphR"><span class="glyphicon glyphicon-sort-by-alphabet-alt" style="vertical-align:bottom;"></span></div>
+					</div>
+				</div>
+			</th>
+			<th class="leftBbn" style="border-left:1px solid #fff;">
+				<div class="divProjUpdatedBy">
+					<div style="display:inline-block;padding-top:10px;padding-left:20px;">Updated By</div>
+					<div class="divProjSort">
+						<div class="divProjSortGlyphL"><span class="glyphicon glyphicon-sort-by-alphabet" style="vertical-align:bottom;"></span></div>
+						<div class="divProjSortGlyphR"><span class="glyphicon glyphicon-sort-by-alphabet-alt" style="vertical-align:bottom;"></span></div>
+					</div>
+				</div>
+			</th>
+			<th style="border-bottom:0 !important;width:10px;">&nbsp;</th>
+			<th style="border-bottom:0 !important;width:10px;">&nbsp;</th>
+		</tr>
+		<div id="divProjLu">
+			
+		</div>
+	</table>
+</div>
+</body>
+	<script type="text/javascript">
+		$(window).on('load',function()
+		{
+		});		
+	</script>
+</html>

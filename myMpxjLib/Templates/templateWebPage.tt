@@ -1,0 +1,535 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="myMpxjLib" #>
+<#@ output extension=".cs" #> 
+<#
+Action<List<mpxWrapper.SnowTask>,int,int,bool>
+uEachTask = null; // null to avoid compile-time error
+uEachTask  = delegate(List<mpxWrapper.SnowTask> argTaskList, int argLvlOrder, int argTreeDepth, bool argIsMpp)
+{
+    int myColSpan = argTreeDepth-argLvlOrder;
+    int myDivMtCount = 7-argLvlOrder;
+    foreach(mpxWrapper.SnowTask task in argTaskList)
+    {
+#>
+        <tr level="<#= argLvlOrder #>">
+<#	    for (int i=0;i<argLvlOrder;i++) { #>
+              <td style="background:transparent;min-width:14px;">&nbsp;</td>
+<#		} #>
+<#		if (task.ChildTasks.Count>0) { #> 
+              <td class="divBtnExpCol" style="background:transparent;min-width:14px;">
+                <span class="glyphicon glyphicon-plus"></span>
+              </td>
+<#      } else { #>
+			  <td style="background:transparent;min-width:14px;">&nbsp;</td>
+<#      } #>
+              <td colspan="<#= myColSpan #>">
+                <div class="divTable mb">
+                  <div class="divThead" >
+                    <div class="divTr"><# if (!argIsMpp) { #> 
+                      <div class="divTh tdTaskNum">Task</div><# } #>
+                      <div class="divTh tdTaskName">Name</div>
+                      <div class="divTh tdTaskAssignmentGroup">Assignment Grp</div>
+                      <div class="divTh tdTaskAssignedTo">Assigned To</div>
+                      <div class="divTh tdTaskState">State</div>
+                      <div class="divTh tdTaskPriority">Priority</div>
+                      <div class="divTh tdTaskImpact">Impact</div>
+                      <div class="divTh tdTaskType">Task Type</div>
+                      <div class="divTh tdTaskConstraint">Time Constraint</div>
+                      <div class="divTh tdTaskKeyMilestone">Key Milestone</div>
+                      <div class="divTh tdTaskMilestone">Milestone</div>
+                      <div class="divTh tdTaskPlannedStartDate ">Planned Start Date</div>
+                      <div class="divTh tdTaskPlannedEndDate">Planned End Date</div>
+                      <div class="divTh tdTaskActualStartDate">Actual Start Date</div>
+                      <div class="divTh tdTaskActualEndDate">Actual End Date</div>
+<#		for (int i=0;i<myDivMtCount;i++) { #>
+                      <div class="divTdMt">&nbsp</div>
+<#      } #>
+                    </div>
+                  </div>
+                  <div class="divTbody">
+                    <div class="divTr"><# if (!argIsMpp) { #> 
+                      <div class="divTd bgWhite tdTaskNum fieldReadOnly" status="<#= task.TaskNum().datastatus #>">
+						<div class="divTd" style="border:none;" value="<#= task.TaskNum().value #>"><#= task.TaskNum().label #></div>
+					  </div> <# } #>
+                      <div class="divTd bgWhite tdTaskName bgWhite" status="<#= task.TaskName().datastatus #>">
+                        <div class="divTable mt">
+                          <div class="divTr">
+							<div class="divTd" value="<#= task.TaskName().value #>" ><#= task.TaskName().label #></div>
+                            <div class="divTdRight btnLu">
+                              <span class="glyphicon glyphicon-edit"></span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="divTd bgWhite tdTaskAssignmentGroup" status="<#= task.AssignmentGroup().datastatus #>">
+                        <div class="divTable mt">
+                          <div class="divTr">
+							<div class="divTd" value="<#= task.AssignmentGroup().value #>"><#= task.AssignmentGroup().label #></div>
+                            <div class="divTdRight btnLu">
+                              <span class="glyphicon glyphicon-search"></span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="divTd bgWhite tdTaskAssignedTo<#= (task.AssignmentGroup().datastatus != "empty" && task.AssignedTo().value != "") ? "" : " fieldReadOnly" #>" status="<#= task.AssignedTo().datastatus #>">
+                        <div class="divTable mt">
+                          <div class="divTr">
+							<div class="divTd" value="<#= task.AssignedTo().value #>"><#= task.AssignedTo().label #></div>
+ 						    <div class="divTdRight btnLu" <#= (task.AssignmentGroup().datastatus != "empty" && task.AssignedTo().value != "") ? "":"style=display:none;" #>>
+							  <span class="glyphicon glyphicon-search"></span>
+						    </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="divTd bgWhite tdTaskState<#= (!argIsMpp && task.IsRollUp().value == "1")? " fieldReadOnly" : "" #>" status="<#= task.State().datastatus #>">
+                        <div class="divTable mt">
+                          <div class="divTr">
+							<div class="divTd" value="<#= task.State().value #>"><#= task.State().label #></div>
+                            <div class="divTdRight btnLu" <#= (!argIsMpp && task.IsRollUp().value == "1")? "style=display:none;" : "" #>>
+                              <span class="glyphicon glyphicon-search"></span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="divTd bgWhite tdTaskPriority" status="<#= task.Priority().datastatus #>">
+                        <div class="divTable mt">
+                          <div class="divTr">
+							<div class="divTd" value="<#= task.Priority().value #>"><#= task.Priority().label #></div>
+                            <div class="divTdRight btnLu">
+                              <span class="glyphicon glyphicon-search"></span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="divTd bgWhite tdTaskImpact" status="<#= task.Impact().datastatus #>">
+                        <div class="divTable mt">
+                          <div class="divTr">
+							<div class="divTd" value="<#= task.Impact().value #>"><#= task.Impact().label #></div>
+                            <div class="divTdRight btnLu">
+                              <span class="glyphicon glyphicon-search"></span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="divTd bgWhite tdTaskType" status="<#= task.TaskType().datastatus #>">
+                        <div class="divTable mt">
+                          <div class="divTr">
+							<div class="divTd" value="<#= task.TaskType().value #>"><#= task.TaskType().label #></div>
+                            <div class="divTdRight btnLu">
+                              <span class="glyphicon glyphicon-search"></span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="divTd bgWhite tdTaskConstraint" status="<#= task.Constraint().datastatus #>">
+                        <div class="divTable mt">
+                          <div class="divTr">
+							<div class="divTd" value="<#= task.Constraint().value #>"><#= task.Constraint().label #></div>
+                            <div class="divTdRight btnLu">
+                              <span class="glyphicon glyphicon-search"></span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="divTd bgWhite tdTaskKeyMilestone" status="<#= task.KeyMilestone().datastatus #>">
+                        <div class="divTable mt">
+                          <div class="divTr">
+							<div class="divTd" value="<#= task.KeyMilestone().value!=""?task.KeyMilestone().value: "0" #>">
+<# if (task.KeyMilestone().value=="1") { #>                              <span class="glyphicon glyphicon-ok"></span>
+<# } else { #>                              <span class="glyphicon glyphicon-ban-circle"></span><# }; #>
+							</div>
+				            <div class="divTdRight btnLu">
+                              <span class="glyphicon glyphicon-edit"></span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+					  <div class="divTd bgWhite tdTaskMilestone" status="<#= task.Milestone().datastatus #>">
+                        <div class="divTable mt">
+                          <div class="divTr">
+							<div class="divTd" value="<#= task.Milestone().value!=""?task.Milestone().value: "0" #>">
+<# if (task.Milestone().value=="1") { #>                              <span class="glyphicon glyphicon-ok"></span>
+<# } else { #>                              <span class="glyphicon glyphicon-ban-circle"></span><# }; #>
+							</div>
+							<div class="divTdRight btnLu">
+                              <span class="glyphicon glyphicon-edit"></span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="divTd bgWhite tdTaskPlannedStartDate<#= (!argIsMpp && task.IsRollUp().value == "1")? " fieldReadOnly" : "" #>" status="<#= task.PlannedStartDate().datastatus #>">
+                        <div class="divTable mt">
+                          <div class="divTr dtmDiv">
+							<div class="divTd" value="<#= task.PlannedStartDate().value #>"><#= task.PlannedStartDate().label #></div>
+ 						    <div class="divTdRight btnLu" <#= (!argIsMpp && task.IsRollUp().value == "1")? "style=display:none;" : "" #>>
+							  <span class="glyphicon glyphicon-calendar"></span>
+						    </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="divTd bgWhite tdTaskPlannedEndDate<#= (!argIsMpp && task.IsRollUp().value == "1")? " fieldReadOnly" : "" #>" status="<#= task.PlannedEndDate().datastatus #>">
+                        <div class="divTable mt">
+                          <div class="divTr dtmDiv">
+							<div class="divTd" value="<#= task.PlannedEndDate().value #>"><#= task.PlannedEndDate().label #></div>
+ 						    <div class="divTdRight btnLu" <#= (!argIsMpp && task.IsRollUp().value == "1")? "style=display:none;" : "" #>>
+							  <span class="glyphicon glyphicon-calendar"></span>
+						    </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="divTd bgWhite tdTaskActualStartDate<#= (!argIsMpp && task.IsRollUp().value == "1")? " fieldReadOnly" : "" #>" status="<#= task.ActualStartDate().datastatus #>">
+                        <div class="divTable mt">
+                          <div class="divTr dtmDiv">
+							<div class="divTd" value="<#= task.ActualStartDate().value #>"><#= task.ActualStartDate().label #></div>
+ 						    <div class="divTdRight btnLu" <#= (!argIsMpp && task.IsRollUp().value == "1")? "style=display:none;" : "" #>>
+							  <span class="glyphicon glyphicon-calendar"></span>
+						    </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="divTd bgWhite tdTaskActualEndDate<#= (!argIsMpp && task.IsRollUp().value == "1")? " fieldReadOnly" : "" #>" status="<#= task.ActualEndDate().datastatus #>">
+                        <div class="divTable mt">
+                          <div class="divTr dtmDiv">
+							<div class="divTd" value="<#= task.ActualEndDate().value #>"><#= task.ActualEndDate().label #></div>
+ 						    <div class="divTdRight btnLu" <#= (!argIsMpp && task.IsRollUp().value == "1")? "style=display:none;" : "" #>>
+							 <span class="glyphicon glyphicon-calendar"></span>
+						    </div>
+                          </div>
+                        </div>
+                      </div>
+<#		for (int i=0;i<myDivMtCount;i++){ #>
+                       <div class="divTdMt">&nbsp</div>
+<#		} #>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+<#
+	    if (task.ChildTasks.Count>0)
+        {
+			uEachTask(task.ChildTasks,argLvlOrder+1,argTreeDepth,argIsMpp);
+        }
+	}
+};#>
+<#
+Action<List<mpxWrapper.SnowProject>,int,bool>
+uEachProject = null; // null to avoid compile-time error
+uEachProject  = delegate(List<mpxWrapper.SnowProject> argProjList, int argTreeDepth, bool argIsMpp)
+{
+    foreach(mpxWrapper.SnowProject proj in argProjList)
+    { #>
+<tr level="0">
+    <td class="divBtnExpCol" style="background:transparent;min-width:14px;">
+      <span class="glyphicon glyphicon-plus"></span>
+    </td>
+    <td colspan="<#= argTreeDepth #>">
+      <div class="divTable mb">
+        <div class="divThead" >
+          <div class="divTr">
+            <div class="divTh tdPortfolio">Portfolio</div>
+            <div class="divTh tdProgram">Program</div>
+            <div class="divTh tdConfigItem">Configuration Item</div><# if (!argIsMpp) { #>
+            <div class="divTh tdProjectNum">Project</div><# } #>
+            <div class="divTh tdProjectName">Name</div>
+            <div class="divTh tdProjectMgr">Project Mgr</div>
+            <div class="divTh tdPhase_">Phase</div>
+            <div class="divTh tdPhaseType">Phase Type</div>
+            <div class="divTh tdSchedule">Schedule</div>
+            <div class="divTh tdState">State</div>
+            <div class="divTh tdPriority">Priority</div>
+            <div class="divTh tdRisk">Risk</div>
+            <div class="divTh tdStrategicPriority">Strategic Priority</div>
+            <div class="divTh tdHotItem">Hot Item</div>
+            <div class="divTh tdNeedsFollowUp">Needs Follow Up</div>
+            <div class="divTh tdPlannedStartDate ">Planned Start Date</div>
+            <div class="divTh tdPlannedEndDate">Planned End Date</div>
+            <div class="divTh tdActualStartDate">Actual Start Date</div>
+            <div class="divTh tdActualEndDate">Actual End Date</div>
+            <div class="divTdMt">&nbsp</div>
+            <div class="divTdMt">&nbsp</div>
+          </div>
+        </div>
+        <div class="divTbody">
+          <div class="divTr">
+            <div class="divTd bgWhite tdPortfolio" status="<#= proj.Portfolio().datastatus #>">
+              <div class="divTable mt">
+                <div class="divTr">
+                  <div class="divTd" value="<#= proj.Portfolio().value #>"><#= proj.Portfolio().label #></div>
+                  <div class="divTdRight btnLu">
+                    <span class="glyphicon glyphicon-search"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="divTd bgWhite tdProgram" status="<#= proj.Program().datastatus #>">
+              <div class="divTable mt">
+                <div class="divTr">
+                  <div class="divTd" value="<#= proj.Program().value #>"><#= proj.Program().label #></div>
+                  <div class="divTdRight btnLu">
+                    <span class="glyphicon glyphicon-search"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="divTd bgWhite tdConfigItem" status="<#= proj.Cmdbci().datastatus #>">
+              <div class="divTable mt">
+                <div class="divTr">
+                  <div class="divTd" value="<#= proj.Cmdbci().value #>"><#= proj.Cmdbci().label #></div>
+                  <div class="divTdRight btnLu">
+                    <span class="glyphicon glyphicon-search"></span>
+                  </div>
+                </div>
+              </div>
+            </div><# if (!argIsMpp) { #>
+            <div class="divTd  bgWhite fieldReadOnly" status="<#= proj.ProjectNum().datastatus #>">
+				<div class="divTd" style="border:none;" value="<#= proj.ProjectNum().value #>"><#= proj.ProjectNum().label #></div>
+			</div><# } #>
+			<div class="divTd bgWhite tdProjectName" status="<#= proj.ProjectName().datastatus #>">
+              <div class="divTable mt">
+                <div class="divTr">
+                  <div class="divTd" value="<#= proj.ProjectName().value #>"><#= proj.ProjectName().label #></div>
+                  <div class="divTdRight btnLu">
+                    <span class="glyphicon glyphicon-edit"></span>
+                  </div>
+                </div>
+              </div>
+			</div>
+            <div class="divTd bgWhite tdProjectMgr" status="<#= proj.ProjMgr().datastatus #>">
+              <div class="divTable mt">
+                <div class="divTr">
+                  <div class="divTd" value="<#= proj.ProjMgr().value #>"><#= proj.ProjMgr().label #></div>
+                  <div class="divTdRight btnLu">
+                    <span class="glyphicon glyphicon-search"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="divTd bgWhite tdPhase_" status="<#= proj.Phase().datastatus #>">
+              <div class="divTable mt">
+                <div class="divTr">
+                  <div class="divTd" value="<#= proj.Phase().value #>"><#= proj.Phase().label #></div>
+                  <div class="divTdRight btnLu">
+                    <span class="glyphicon glyphicon-search"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="divTd bgWhite tdPhaseType" status="<#= proj.PhaseType().datastatus #>">
+              <div class="divTable mt">
+                <div class="divTr">
+                  <div class="divTd" value="<#= proj.PhaseType().value #>"><#= proj.PhaseType().label #></div>
+                  <div class="divTdRight btnLu">
+                    <span class="glyphicon glyphicon-search"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="divTd bgWhite tdSchedule" status="<#= proj.Schedule().datastatus #>">
+              <div class="divTable mt">
+                <div class="divTr">
+                  <div class="divTd" value="<#= proj.Schedule().value #>"><#= proj.Schedule().label #></div>
+                  <div class="divTdRight btnLu">
+                    <span class="glyphicon glyphicon-search"></span>
+                  </div>
+                </div>
+              </div>
+			</div>
+            <div class="divTd bgWhite tdState<#= (!argIsMpp && proj.IsRollUp().value == "1")? " fieldReadOnly" : "" #>" status="<#= proj.State().datastatus #>">
+              <div class="divTable mt" value="<#= proj.State().value #>">
+                <div class="divTr">
+                  <div class="divTd"><#= proj.State().label #></div>
+                  <div class="divTdRight btnLu" <#= (!argIsMpp && proj.IsRollUp().value == "1")? "style=display:none;" : "" #>>
+                    <span class="glyphicon glyphicon-search"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="divTd bgWhite tdPriority" status="<#= proj.Priority().datastatus #>">
+              <div class="divTable mt">
+                <div class="divTr">
+                  <div class="divTd" value="<#= proj.Priority().value #>"><#= proj.Priority().label #></div>
+                  <div class="divTdRight btnLu">
+                    <span class="glyphicon glyphicon-search"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="divTd bgWhite tdRisk" status="<#= proj.Risk().datastatus #>">
+              <div class="divTable mt">
+                <div class="divTr">
+                  <div class="divTd" value="<#= proj.Risk().value #>"><#= proj.Risk().label #></div>
+                  <div class="divTdRight btnLu">
+                    <span class="glyphicon glyphicon-search"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="divTd bgWhite tdStrategicPriority" status="<#= proj.StrategicPriority().datastatus #>">
+              <div class="divTable mt">
+                <div class="divTr">
+                  <div class="divTd" value="<#= proj.StrategicPriority().value #>"><#= proj.StrategicPriority().label #></div>
+                  <div class="divTdRight btnLu">
+                    <span class="glyphicon glyphicon-edit"></span>
+                  </div>
+                </div>
+              </div>
+			</div>
+            <div class="divTd bgWhite tdHotItem" status="<#= proj.HotItem().datastatus #>">
+              <div class="divTable mt">
+                <div class="divTr">
+                  <div class="divTd" value="<#= proj.HotItem().value != ""? proj.HotItem().value : "0" #>">
+<# if (proj.HotItem().value=="1") { #>					<span class="glyphicon glyphicon-ok"></span>
+<# } else { #>					<span class="glyphicon glyphicon-ban-circle"></span><# }; #>
+				  </div>
+                  <div class="divTdRight btnLu">
+                    <span class="glyphicon glyphicon-edit"></span>
+                  </div>
+                </div>
+              </div>
+			</div>
+            <div class="divTd bgWhite tdNeedsFollowUp" status="<#= proj.NeedsFollowUp().datastatus #>">
+              <div class="divTable mt">
+                <div class="divTr">
+                  <div class="divTd" value="<#= proj.NeedsFollowUp().value != ""? proj.NeedsFollowUp().value : "0" #>">
+<# if (proj.NeedsFollowUp().value=="1") { #>					<span class="glyphicon glyphicon-ok"></span>
+<# } else { #>					<span class="glyphicon glyphicon-ban-circle"></span><# }; #>
+				  </div>
+                  <div class="divTdRight btnLu">
+                    <span class="glyphicon glyphicon-edit"></span>
+                  </div>
+                </div>
+              </div>
+			</div>
+            <div class="divTd bgWhite tdPlannedStartDate" status="<#= proj.PlannedStartDate().datastatus #>">
+              <div class="divTable mt">
+                <div class="divTr dtmDiv">
+                  <div class="divTd" value="<#= proj.PlannedStartDate().value #>"><#= proj.PlannedStartDate().label #></div>
+                  <div class="divTdRight btnCal">
+                      <span class="glyphicon glyphicon-calendar"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="divTd bgWhite tdPlannedEndDate<#= (!argIsMpp && proj.IsRollUp().value == "1")? " fieldReadOnly" : "" #>" status="<#= proj.PlannedEndDate().datastatus #>">
+              <div class="divTable mt">
+                <div class="divTr dtmDiv">
+                  <div class="divTd" value="<#= proj.PlannedEndDate().value #>"><#= proj.PlannedEndDate().label #></div>
+                  <div class="divTdRight btnLu" <#=(!argIsMpp && proj.IsRollUp().value == "1")?  "style=display:none;" : "" #>>
+                    <span class="glyphicon glyphicon-calendar"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="divTd bgWhite tdActualStartDate<#= (!argIsMpp && proj.IsRollUp().value == "1")? " fieldReadOnly" : "" #>" status="<#= proj.ActualStartDate().datastatus #>">
+              <div class="divTable mt">
+                <div class="divTr dtmDiv">
+                  <div class="divTd" value="<#= proj.ActualStartDate().value #>"><#= proj.ActualStartDate().label #></div>
+                  <div class="divTdRight btnLu" <#= (!argIsMpp && proj.IsRollUp().value == "1")?  "style=display:none;" : "" #>>
+                    <span class="glyphicon glyphicon-calendar"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="divTd bgWhite tdActualEndDate<#= (!argIsMpp && proj.IsRollUp().value == "1")? " fieldReadOnly" : "" #>" status="<#= proj.ActualEndDate().datastatus #>">
+              <div class="divTable mt">
+                <div class="divTr dtmDiv">
+                  <div class="divTd" value="<#= proj.ActualEndDate().value #>"><#= proj.ActualEndDate().label #></div>
+                  <div class="divTdRight btnLu" <#= (!argIsMpp && proj.IsRollUp().value == "1")?  "style=display:none;" : "" #>>
+                    <span class="glyphicon glyphicon-calendar"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="divTdMt">&nbsp</div>
+            <div class="divTdMt">&nbsp</div>
+          </div>
+        </div>
+      </div>
+    </td>
+  </tr>
+  <#
+		if (proj.ChildTasks.Count>0)
+		{
+			uEachTask(proj.ChildTasks,1,argTreeDepth,argIsMpp);
+		}
+	}
+};#>
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Snow Mpp</title>
+<link rel="icon" href="../images/favicon.ico" type="image/x-icon" />
+<link rel="stylesheet" type="text/css" href="../styles/mySite<#= twpIsMpp?"":"2" #>.css">
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../scripts/ejs2.min.js"></script>
+<script type="text/javascript" src="../tmpscript/myludata.js"></script>
+<script type="text/javascript" src="../scripts/jquery.myUtilPlugin.js"></script>
+</head>
+<body>
+<div class="container">
+<table style="border-collapse: collapse;">
+<# uEachProject(twpProject,twpDepth,twpIsMpp); #>
+</table>
+</div>
+<div id="divDatePickerContainer" style="display:none;border-top:8px solid #999;width:fit-content;" on>
+	<table><tr>
+		<td><input id="inpDp" type="text" value="YYYY-MM-DD" style="width:138px;background:#ddd;" readonly/></td>
+		<td><input id="inpTime" type="time" value=""/></td>		
+	</tr>
+	<tr id="trFinalCalBtnRow" style="display:none;">
+		<td colspan="2" style="text-align:right;align-content:right;padding-top:2px;">
+			<div id="divBtnCalAccept" class="btnGlyph">
+				<span class="glyphicon glyphicon-ok" style="font-size:14px;vertical-align:top;">
+			</div>
+			<div id="divBtnCalReject" class="btnGlyph">
+				<span class="glyphicon glyphicon-remove" style="font-size:14px;vertical-align:top;margin-top:1px;"></span></td>
+			</div>
+		</td>
+	</tr>
+	</table>
+	<div id="divDatePicker"></div>
+	<div id="divBtnDpExitContainer" style="display:block;width:100%;text-align:right;align-content:right;background-color:#eee;">&nbsp;
+		<div class="btnDpContainer">
+			<div id="divBtnDpTimeUpd" class="btnDp" style="display:none;">Time Update</div>
+			<div id="divBtnDpEmpty" class="btnDp" >Clear Date</div>
+			<div id="divBtnDpExit" class="btnDp">Exit</div>
+		</div>
+	</div>
+</div>
+<div id="divLuContainer" style="display:none;border:1px solid black;background:#eee;width:fit-content;">
+    <div id="divBtnLuExit" class="btn2Glyph" style="float:right;padding:0px 0px 0px 0px;"><span class="glyphicon glyphicon-remove" style="font-size:12px;vertical-align:top;margin-top:1px;"></div>
+	<div style="display:block;padding:12px">
+		<table id="tblLu" class="lu" value="1">
+		</table>
+	</div>
+</div>
+</body>
+	<script type="text/javascript">
+		$(window).on('load',function()
+		{
+			$($.myBtnLuClass).click($().myUtilPlugin().luClick);	
+			$($.myBtnCalClass).click($().myUtilPlugin().calClick);	
+			$($.myBtnCalAcceptId).click($().myUtilPlugin().calAccept);	
+			$($.myBtnCalRejectId).click($().myUtilPlugin().calReject);	
+			$($.myBtnDpExitId).click($().myUtilPlugin().calClose);
+			$($.myBtnDpTimeUpdId).click($().myUtilPlugin().calSelectTimeUpd);			
+			$($.myBtnDpEmtpyId).click($().myUtilPlugin().calBlank);			
+			$($.myBtnLuExitId).click($().myUtilPlugin().luExit);
+			$($.myDivDatePickerContainerId).click($().myUtilPlugin().ehIgnore);
+			$($.myDivLuContainerId).click($().myUtilPlugin().ehIgnore);
+			$(window).bind('mousewheel',$().myUtilPlugin().ehWindow);
+			$(window).click($().myUtilPlugin().ehWindow);
+			$().myUtilPlugin().ecInitTr();
+		});		
+	</script>
+</html>

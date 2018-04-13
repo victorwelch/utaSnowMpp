@@ -1,0 +1,17 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="myMpxjLib.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="webService" Type="System.Collections.Specialized.StringCollection" Scope="Application">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;string&gt;create|/api/x_126085_umppmgr/uweb/create&lt;/string&gt;
+  &lt;string&gt;read|/api/x_126085_umppmgr/uweb/read/{0}&lt;/string&gt;
+  &lt;string&gt;update|/api/x_126085_umppmgr/uweb/update/1&lt;/string&gt;
+  &lt;string&gt;validate|/api/x_126085_umppmgr/uweb/uvaliduser/{0}&lt;/string&gt;
+  &lt;string&gt;lulists|/api/x_126085_umppmgr/uweb/lulist/1&lt;/string&gt;
+  &lt;string&gt;projlist|/api/x_126085_umppmgr/uweb/projlist/1&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
